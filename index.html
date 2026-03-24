@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Automation</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #msg {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Send Email</h2>
+
+  <input type="text" id="name" placeholder="Enter Name">
+  <input type="email" id="email" placeholder="Enter Email">
+
+  <button onclick="sendData()">Submit</button>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+async function sendData() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const msg = document.getElementById("msg");
+
+  msg.innerText = "⏳ Sending...";
+
+  try {
+    const res = await fetch("https://manmeet-234.app.n8n.cloud/webhook/c8f77065-e3ef-478f-861d-fe11760db9d6", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email
+      })
+    });
+
+    if (res.ok) {
+      msg.innerText = "✅ Email Sent Successfully!";
+    } else {
+      msg.innerText = "❌ Error sending email";
+    }
+
+  } catch (error) {
+    console.log(error);
+    msg.innerText = "❌ Failed to connect";
+  }
+}
+</script>
+
+</body>
+</html>
